@@ -1,24 +1,35 @@
 package com.recorriendoba.tours.service;
 
-import org.springframework.stereotype.Service;
-import com.recorriendoba.tours.model.Categoria;
 import com.recorriendoba.tours.model.CategoriaEntity;
-import com.recorriendoba.tours.exception.CategoriaNoEncontradaException;
-import com.recorriendoba.tours.exception.NombreInvalidoException;
-import com.recorriendoba.tours.exception.DescripcionInvalidaException;
-import com.recorriendoba.tours.exception.ImagenInvalidaException;
-import com.recorriendoba.tours.exception.CategoriaInvalidaException;
-
+import com.recorriendoba.tours.repository.CategoriaRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.ArrayList;
-
 @Service
 public class CategoriaService {
-    private final List<Categoria> categorias = new ArrayList<>();
-    private int counterId = 1;
 
-    public CategoriaService() {
+    private final CategoriaRepository categoriaRepository;
+    
+    public CategoriaService(CategoriaRepository categoriaRepository) {
+        this.categoriaRepository = categoriaRepository;
+    }
+
+    public List<CategoriaEntity> getAllCategorias() {
+        return categoriaRepository.findAll();
+    }
+
+    public CategoriaEntity findById(Integer id) {
+        return categoriaRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Categoría no encontrada con ID: " + id));
+    }
+
+    public CategoriaEntity saveCategoria(CategoriaEntity categoria) {
+        return categoriaRepository.save(categoria);
+    }
+}
+
+
+    /*public CategoriaService() {
         categorias.add(new Categoria(counterId++, "Artístico", "Explora la riqueza cultural y artística de Buenos Aires a través de sus teatros, galerías y espacios culturales.", "https://i.postimg.cc/cCBWJ01K/cupula-Interior-Colon.jpg"));
         categorias.add(new Categoria(counterId++, "Misterios y Leyendas", "Sumérgete en el lado misterioso de la ciudad con recorridos que revelan historias ocultas y leyendas fascinantes.", "https://i.postimg.cc/VvWwNmst/cementerio-Recoleta.jpg"));
         categorias.add(new Categoria(counterId++, "Íconicos", "Descubre los lugares más emblemáticos de Buenos Aires, desde monumentos históricos hasta barrios con encanto.", "https://i.postimg.cc/d3jF0wQZ/comercio-caminito.jpg"));
@@ -27,7 +38,7 @@ public class CategoriaService {
     }
 
     public List<Categoria> getAllCategorias() {
-        return categorias;
+        return categorias.findAll;
     }
 
     public Categoria getCategoryById(Integer id) {
@@ -105,4 +116,4 @@ public class CategoriaService {
 
     
     
-}
+}*/

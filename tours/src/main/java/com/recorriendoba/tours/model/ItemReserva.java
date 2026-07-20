@@ -1,47 +1,44 @@
 package com.recorriendoba.tours.model;
+
+import jakarta.persistence.*;
 import lombok.*;
+import lombok.Data;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Entity
+@Table(name = "items_reserva")
 public class ItemReserva {
-    private Tour tour;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tour_id")
+    private TourEntity tour;
     private Integer tourId;
     private Integer cantidad;
     private Double precioUnitario;
+        
     private Double precioTotal;
-    private java.time.LocalDate fechaReserva;
-    private java.time.LocalTime horaReserva;
+    
+    private LocalDate fechaReserva;
+    private LocalTime horaReserva;
+    private String estadoReserva; 
+    private String metodoPago; 
+    
     private String nombreCliente;
     private String emailCliente;
-    private String telefonoCliente;
-    private java.time.LocalDate fechaCreacion;
-    private java.time.LocalDate fechaActualizacion;
-    private String estadoReserva;
-    private String metodoPago;
-    private String numeroTarjeta;
-    private String nombreApellidoTitularTarjeta;
-    private String tipoTarjeta;
-    private Integer fechaExpiracion;
-    private String codigoSeguridad;
-    private String direccionFacturacion;
-    private String ciudadFacturacion;
-    private String paisFacturacion;
-    private String codigoPostalFacturacion;
-    private String estadoFacturacion;
-    private String nombreTitular;
-    private String apellidoTitular;
-    private String numeroDocumento;
-    private String tipoDocumento;
-    private String nacionalidad;
-    private String genero;
-    private java.time.LocalDate fechaNacimiento;
-    private String lugarNacimiento;
-    private String itemReservaId;
-    
+        
+    private LocalDate fechaCreacion;
+
+    @PrePersist
+    protected void onCreate() {
+        this.fechaCreacion = LocalDate.now();
+        this.estadoReserva = "PENDIENTE";
+    }
 }

@@ -1,13 +1,8 @@
 package com.recorriendoba.tours.model;
 
-import lombok.*;
+import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-
-
-
-
-
 
 @Entity
 @Table(name = "tours")
@@ -16,15 +11,17 @@ import jakarta.persistence.*;
 public class TourEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     private String nombre;
     private String descripcion;
+    private String imagenUrl;
     private Double precio;
     private Integer stock;
     private Integer duracion;
-    private String imagen;
-    private Integer vendidos;
-
+    private Integer categoryId;
+    private String tags;
+    private boolean featured;
+    private Integer vendidos = 0;
     @ManyToOne(
             fetch = FetchType.LAZY,
             optional = false
@@ -33,11 +30,11 @@ public class TourEntity {
     @JsonIgnoreProperties("tours")
     private CategoriaEntity categoria;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -73,13 +70,13 @@ public class TourEntity {
         this.stock = stock;
     }
 
-    public int getSales() {
-        return vendidos;
+    /*public int getSales() {
+        return ventas;
     }
 
     public void setSales(int vendidos) {
         this.vendidos = vendidos;
-    }
+    }*/
 
     public CategoriaEntity getCategory() {
         return categoria;
@@ -97,10 +94,10 @@ public class TourEntity {
     }
 
     public String getImageUrl() {
-        return imagen;
+        return imagenUrl;
     }
-    public void setImageUrl(String imagen) {
-        this.imagen = imagen;
+    public void setImageUrl(String imagenUrl) {
+        this.imagenUrl = imagenUrl;
     }
 
     public TourEntity() {
@@ -111,7 +108,7 @@ public class TourEntity {
         this.precio = precio;
         this.stock = stock;
         this.duracion = duracion;
-        this.imagen = imagen;
+        this.imagenUrl = imagen;
         this.categoria = categoria;
     }
     public void updateFrom(TourEntity updatedTour) {
@@ -120,7 +117,7 @@ public class TourEntity {
         this.precio = updatedTour.getPrice();
         this.stock = updatedTour.getStock();
         this.duracion = updatedTour.getDuration();
-        this.imagen = updatedTour.getImageUrl();
+        this.imagenUrl = updatedTour.getImagenUrl();
         this.categoria = updatedTour.getCategory();
     }
 
@@ -132,6 +129,5 @@ public class TourEntity {
         this.vendidos += cantidad;
     }
 
-    public create 
+    
 }
-

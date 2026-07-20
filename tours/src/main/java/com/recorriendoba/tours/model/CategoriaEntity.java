@@ -2,6 +2,9 @@ package com.recorriendoba.tours.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.Data;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,6 +22,10 @@ public class CategoriaEntity {
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("categoria")
     private List<TourEntity> tours;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "carrito_id")
+    private List<ItemReserva> items = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -44,3 +51,10 @@ public class CategoriaEntity {
         this.tours = tours;
     }
 }
+
+
+
+
+
+
+

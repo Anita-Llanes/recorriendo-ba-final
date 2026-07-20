@@ -1,18 +1,86 @@
 package com.recorriendoba.tours.service;
 
 
-import com.recorriendoba.tours.model.TourEntity;
 import com.recorriendoba.tours.repository.TourRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
+
 
 import com.recorriendoba.tours.exception.*;
 import com.recorriendoba.tours.model.*;
 import java.util.List;
-import java.util.ArrayList;
+
 
 @Service
 public class TourService {
+    
+    private final TourRepository tourRepository;
+
+    public TourService(TourRepository tourRepository) {
+        this.tourRepository = tourRepository;
+    }
+
+    public List<TourEntity> getAllTours() {
+        return tourRepository.findAll();
+    }
+
+    public TourEntity getTourById(Integer id) {
+        return tourRepository.findById(id)
+                .orElseThrow(() -> new TourNoEncontradoException("Tour con ID " + id + " no encontrado"));
+    }
+
+    public TourEntity getTourByName(String name) {
+        return tourRepository.findByName(name)
+                .orElseThrow(() -> new TourNoEncontradoException("Tour con nombre " + name + " no encontrado"));
+    }
+
+    public TourEntity createTour(TourRequest request) {
+        TourEntity tour = new TourEntity();
+        mapearRequestATour(request, tour);
+        return tourRepository.save(tour);
+    }
+
+    public TourEntity modificarTour(Integer id, TourRequest request) {
+        TourEntity existingTour = getTourById(id);
+        mapearRequestATour(request, existingTour);
+        return tourRepository.save(existingTour);
+    }
+
+    public void deleteTour(Integer id) {
+        if (!tourRepository.existsById(id)) {
+            throw new TourNoEncontradoException("No se puede eliminar, el tour no existe");
+        }
+        tourRepository.deleteById(id);
+    }
+    
+    private void mapearRequestATour(TourRequest request, TourEntity tour) {
+        tour.setName(request.getName());
+        tour.setDescription(request.getDescription());
+        tour.setImageUrl(request.getImageUrl());
+        tour.setCategoryId(request.getCategoryId());
+        tour.setPrice(request.getPrice());
+        tour.setDuration(request.getDuration());
+        tour.setTags(request.getTags());
+        tour.setFeatured(request.isFeatured());
+    }
+}
+
+
+    /*public TourEntity createTour(TourRequest request) {
+        TourEntity tour = new TourEntity();
+        tour.setName(request.getName());
+        tour.setDescription(request.getDescription());
+        tour.setImageUrl(request.getImageUrl());
+        tour.setCategoryId(request.getCategoryId());
+        tour.setPrice(request.getPrice());
+        tour.setDuration(request.getDuration());
+        tour.setTags(request.getTags());
+        tour.setFeatured(request.isFeatured());
+        return tourRepository.save(tour);
+    }
+
+}
+
+    
     private final List<Tour> tours = new ArrayList<>();
     private int counterId = 1;
 
@@ -150,5 +218,10 @@ public class TourService {
         return filteredTours;
     }
 
-
+    public TourEntity createTour(TourRequest request) {
+    TourEntity tour = new TourEntity();
+    tour.setName(request.getName());
+    return tourRepository.save(tour);
 }
+
+}*/

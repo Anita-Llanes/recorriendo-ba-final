@@ -6,3 +6,5 @@ public class CategoriaInvalidaException  extends RuntimeException {
     }
     
 }
+
+
